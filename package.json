@@ -1,0 +1,26 @@
+{
+  "name": "car-scraping",
+  "version": "1.0.0",
+  "description": "to scrape cars off kijiji",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArthurG/car-scraping.git"
+  },
+  "author": "Arthur Guo",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/ArthurG/car-scraping/issues"
+  },
+  "homepage": "https://github.com/ArthurG/car-scraping#readme",
+  "dependencies": {
+    "kijiji-scraper": "^2.1.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1"
+  }
+}
