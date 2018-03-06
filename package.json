@@ -17,7 +17,8 @@
   },
   "homepage": "https://github.com/ArthurG/car-scraping#readme",
   "dependencies": {
-    "kijiji-scraper": "^2.1.0"
+    "kijiji-scraper": "^2.1.0",
+    "winston": "^3.0.0-rc1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
