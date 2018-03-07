@@ -44,7 +44,7 @@ function collectUnseenItems(newItems){
       }
       titles2.push(item.title);
    }
-   title = titles2
+   titles = titles2
    return Promise.resolve(unseenItems);
 }
 
@@ -99,6 +99,7 @@ function download(uri){
 
 function saveCar(carData){
   logger.log({
+    scrapedTime: Date.now(),
     level: 'info',
     data: carData
   });
