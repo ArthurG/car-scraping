@@ -3,8 +3,7 @@ var crypto = require("crypto");
 var request = require("request");
 var fs = require("fs");
 var winston = require("winston");
-var http = require('https'),                                                
-    Stream = require('stream').Transform;
+var download = require('download');
 
 const logger = winston.createLogger({
   level: 'info',
@@ -49,9 +48,11 @@ function collectUnseenItems(newItems){
 }
 
 function scrapeEachCar(cars){
-  for(var i in cars){
-     scrapeCar(cars[i].link).then(scrapeImage).then(saveCar);
-  }
+  return Promise.all([
+      cars.map( function(car){
+        scrapeCar(car.link).then(scrapeImage).then(saveCar);
+      })
+  ]);
 }
 
 function scrapeCar(url){
@@ -69,7 +70,10 @@ function scrapeImage(car){
    return new Promise(function(resolve, reject){
      let images = car.images;
      new_images = [];
-     let downloadPromise = Promise.all(images.map(download));
+     let downloadPromise = Promise.all(images.map(function(img){
+         var id = crypto.randomBytes(20).toString('hex') + ".jpg";
+         download(img, 'car-photos', {filename:id});
+     }));
      downloadPromise.then(function(new_images){
        car.images = new_images;
        resolve(car);
@@ -78,24 +82,6 @@ function scrapeImage(car){
    });
 
 }
-
-function download(uri){
-  var id = crypto.randomBytes(20).toString('hex') + ".jpg";
-  var filename = "photos/"+id;
-  return new Promise(function (resolve, reject){
-    http.request(uri, function(response) {                                        var data = new Stream();                                                    
-
-      response.on('data', function(chunk) {                                       
-        data.push(chunk);                                                         
-      });                                                                         
-
-      response.on('end', function() {                                             
-        fs.writeFileSync(filename, data.read());                               
-        resolve();
-      });                                                                         
-    }).on("error", reject).end();
-  });
-};
 
 function saveCar(carData){
   logger.log({
@@ -108,7 +94,13 @@ function saveCar(carData){
 function doScrape(){
   getOntarioCars()
     .then(collectUnseenItems)
-    .then(scrapeEachCar);
+    .then(scrapeEachCar)
+    .catch(function(err){
+        logger.log({
+            level: 'error',
+            data: err
+        });
+    });
 }
 
 setInterval(doScrape, 3000);

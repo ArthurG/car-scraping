@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/ArthurG/car-scraping#readme",
   "dependencies": {
+    "download": "^6.2.5",
     "kijiji-scraper": "^2.1.0",
     "winston": "^3.0.0-rc1"
   },
